@@ -79,7 +79,7 @@ export default {
   margin-top: 110px;
   transition: all 0.3s;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-60%);
 
   &.isDark {
     .trigger {

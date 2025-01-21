@@ -79,16 +79,7 @@ import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
 import MindMapLayoutPro from 'simple-mind-map/src/plugins/MindMapLayoutPro.js'
 import Themes from 'simple-mind-map-plugin-themes'
 // 协同编辑插件
-// import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
-// 以下插件为付费插件，详情请查看开发文档。依次为：手绘风格插件、标记插件、编号插件、Freemind软件格式导入导出插件、Excel软件格式导入导出插件、待办插件、节点连线流动效果插件
-// import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
-// import Notation from 'simple-mind-map-plugin-notation'
-// import Numbers from 'simple-mind-map-plugin-numbers'
-// import Freemind from 'simple-mind-map-plugin-freemind'
-// import Excel from 'simple-mind-map-plugin-excel'
-// import Checkbox from 'simple-mind-map-plugin-checkbox'
-// import LineFlow from 'simple-mind-map-plugin-lineflow'
-// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map simple-mind-map-plugin-themes simple-mind-map-plugin-lineflow
+import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -199,9 +190,7 @@ export default {
       isShowScrollbar: state => state.localConfig.isShowScrollbar,
       useLeftKeySelectionRightKeyDrag: state =>
         state.localConfig.useLeftKeySelectionRightKeyDrag,
-      isUseHandDrawnLikeStyle: state =>
-        state.localConfig.isUseHandDrawnLikeStyle,
-      extraTextOnExport: state => state.extraTextOnExport,
+      extraTextOnExport: state => state.localConfig.extraTextOnExport,
       isDragOutlineTreeNode: state => state.isDragOutlineTreeNode
     })
   },
@@ -220,13 +209,6 @@ export default {
         this.removeScrollbarPlugin()
       }
     },
-    isUseHandDrawnLikeStyle() {
-      if (this.isUseHandDrawnLikeStyle) {
-        this.addHandDrawnLikeStylePlugin()
-      } else {
-        this.removeHandDrawnLikeStylePlugin()
-      }
-    }
   },
   mounted() {
     showLoading()
@@ -363,7 +345,7 @@ export default {
         customInnerElsAppendTo: null,
         customHandleClipboardText: handleClipboardText,
         defaultNodeImage: require('../../../assets/img/图片加载失败.svg'),
-        initRootNodePosition: ['center', 'center'],
+        initRootNodePosition: ['0%', 'center'],
         handleIsSplitByWrapOnPasteCreateNewNode: () => {
           return this.$confirm(
             this.$t('edit.splitByWrap'),
@@ -543,10 +525,7 @@ export default {
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       if (this.isShowScrollbar) this.addScrollbarPlugin()
-      if (this.isUseHandDrawnLikeStyle) this.addHandDrawnLikeStylePlugin()
-      if (typeof HandDrawnLikeStyle !== 'undefined') {
-        this.$store.commit('setSupportHandDrawnLikeStyle', true)
-      }
+
       if (typeof Notation !== 'undefined') {
         this.mindMap.addPlugin(Notation)
         this.$store.commit('setSupportMark', true)
@@ -727,133 +706,6 @@ export default {
       this.mindMap.removePlugin(ScrollbarPlugin)
     },
 
-    // 加载手绘风格插件
-    addHandDrawnLikeStylePlugin() {
-      try {
-        if (!this.mindMap) return
-        this.mindMap.addPlugin(HandDrawnLikeStyle)
-        this.mindMap.reRender()
-      } catch (error) {
-        console.log('手绘风格插件不存在')
-      }
-    },
-
-    // 移除手绘风格插件
-    removeHandDrawnLikeStylePlugin() {
-      try {
-        this.mindMap.removePlugin(HandDrawnLikeStyle)
-        this.mindMap.reRender()
-      } catch (error) {
-        console.log('手绘风格插件不存在')
-      }
-    },
-
-    // 测试动态插入节点
-    testDynamicCreateNodes() {
-      // return
-      setTimeout(() => {
-        // 动态给指定节点添加子节点
-        // this.mindMap.execCommand(
-        //   'INSERT_CHILD_NODE',
-        //   false,
-        //   null,
-        //   {
-        //     text: '自定义内容'
-        //   },
-        //   [
-        //     {
-        //       data: {
-        //         text: '自定义子节点'
-        //       }
-        //     }
-        //   ]
-        // )
-        // 动态给指定节点添加同级节点
-        // this.mindMap.execCommand(
-        //   'INSERT_NODE',
-        //   false,
-        //   null,
-        //   {
-        //     text: '自定义内容'
-        //   },
-        //   [
-        //     {
-        //       data: {
-        //         text: '自定义同级节点'
-        //       },
-        //       children: [
-        //         {
-        //           data: {
-        //             text: '自定义同级节点2'
-        //           },
-        //           children: []
-        //         }
-        //       ]
-        //     }
-        //   ]
-        // )
-        // 动态插入多个子节点
-        // this.mindMap.execCommand('INSERT_MULTI_CHILD_NODE', null, [
-        //   {
-        //     data: {
-        //       text: '自定义节点1'
-        //     },
-        //     children: [
-        //       {
-        //         data: {
-        //           text: '自定义节点1-1'
-        //         },
-        //         children: []
-        //       }
-        //     ]
-        //   },
-        //   {
-        //     data: {
-        //       text: '自定义节点2'
-        //     },
-        //     children: [
-        //       {
-        //         data: {
-        //           text: '自定义节点2-1'
-        //         },
-        //         children: []
-        //       }
-        //     ]
-        //   }
-        // ])
-        // 动态插入多个同级节点
-        // this.mindMap.execCommand('INSERT_MULTI_NODE', null, [
-        //   {
-        //     data: {
-        //       text: '自定义节点1'
-        //     },
-        //     children: [
-        //       {
-        //         data: {
-        //           text: '自定义节点1-1'
-        //         },
-        //         children: []
-        //       }
-        //     ]
-        //   },
-        //   {
-        //     data: {
-        //       text: '自定义节点2'
-        //     },
-        //     children: [
-        //       {
-        //         data: {
-        //           text: '自定义节点2-1'
-        //         },
-        //         children: []
-        //       }
-        //     ]
-        //   }
-        // ])
-        // 动态删除指定节点
-        // this.mindMap.execCommand('REMOVE_NODE', this.mindMap.renderer.root.children[0])
-      }, 5000)
-    },
 
     // 协同测试
     cooperateTest() {

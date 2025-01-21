@@ -6,91 +6,48 @@
       <div class="row">
         <el-tabs class="tab" v-model="activeTab">
           <el-tab-pane :label="$t('baseStyle.color')" name="color">
-            <Color
-              :color="style.backgroundColor"
-              @change="
-                color => {
-                  update('backgroundColor', color)
-                }
-              "
-            ></Color>
+            <Color :color="style.backgroundColor" @change="color => {
+                update('backgroundColor', color)
+              }
+              "></Color>
           </el-tab-pane>
           <el-tab-pane :label="$t('baseStyle.image')" name="image">
-            <ImgUpload
-              class="imgUpload"
-              v-model="style.backgroundImage"
-              @change="
-                img => {
-                  update('backgroundImage', img)
-                }
-              "
-            ></ImgUpload>
+            <ImgUpload class="imgUpload" v-model="style.backgroundImage" @change="img => {
+                update('backgroundImage', img)
+              }
+              "></ImgUpload>
             <!-- 图片重复方式 -->
             <div class="rowItem">
               <span class="name">{{ $t('baseStyle.imageRepeat') }}</span>
-              <el-select
-                size="mini"
-                style="width: 120px"
-                v-model="style.backgroundRepeat"
-                placeholder=""
-                @change="
-                  value => {
-                    update('backgroundRepeat', value)
-                  }
-                "
-              >
-                <el-option
-                  v-for="item in backgroundRepeatList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                >
+              <el-select size="mini" style="width: 120px" v-model="style.backgroundRepeat" placeholder="" @change="value => {
+                  update('backgroundRepeat', value)
+                }
+                ">
+                <el-option v-for="item in backgroundRepeatList" :key="item.value" :label="item.name"
+                  :value="item.value">
                 </el-option>
               </el-select>
             </div>
             <!-- 图片位置 -->
             <div class="rowItem">
               <span class="name">{{ $t('baseStyle.imagePosition') }}</span>
-              <el-select
-                size="mini"
-                style="width: 120px"
-                v-model="style.backgroundPosition"
-                placeholder=""
-                @change="
-                  value => {
-                    update('backgroundPosition', value)
-                  }
-                "
-              >
-                <el-option
-                  v-for="item in backgroundPositionList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                >
+              <el-select size="mini" style="width: 120px" v-model="style.backgroundPosition" placeholder="" @change="value => {
+                  update('backgroundPosition', value)
+                }
+                ">
+                <el-option v-for="item in backgroundPositionList" :key="item.value" :label="item.name"
+                  :value="item.value">
                 </el-option>
               </el-select>
             </div>
             <!-- 图片大小 -->
             <div class="rowItem">
               <span class="name">{{ $t('baseStyle.imageSize') }}</span>
-              <el-select
-                size="mini"
-                style="width: 120px"
-                v-model="style.backgroundSize"
-                placeholder=""
-                @change="
-                  value => {
-                    update('backgroundSize', value)
-                  }
-                "
-              >
-                <el-option
-                  v-for="item in backgroundSizeList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                >
+              <el-select size="mini" style="width: 120px" v-model="style.backgroundSize" placeholder="" @change="value => {
+                  update('backgroundSize', value)
+                }
+                ">
+                <el-option v-for="item in backgroundSizeList" :key="item.value" :label="item.name" :value="item.value">
                 </el-option>
               </el-select>
             </div>
@@ -102,47 +59,23 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.color') }}</span>
-          <span
-            class="block"
-            v-popover:popover
-            :style="{ backgroundColor: style.lineColor }"
-          ></span>
+          <span class="block" v-popover:popover :style="{ backgroundColor: style.lineColor }"></span>
           <el-popover ref="popover" placement="bottom" trigger="click">
-            <Color
-              :color="style.lineColor"
-              @change="
-                color => {
-                  update('lineColor', color)
-                }
-              "
-            ></Color>
+            <Color :color="style.lineColor" @change="color => {
+                update('lineColor', color)
+              }
+              "></Color>
           </el-popover>
         </div>
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.width') }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.lineWidth"
-            placeholder=""
-            @change="
-              value => {
-                update('lineWidth', value)
-              }
-            "
-          >
-            <el-option
-              v-for="item in lineWidthList"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
-              <span
-                v-if="item > 0"
-                class="borderLine"
-                :class="{ isDark: isDark }"
-                :style="{ height: item + 'px' }"
-              ></span>
+          <el-select size="mini" style="width: 80px" v-model="style.lineWidth" placeholder="" @change="value => {
+              update('lineWidth', value)
+            }
+            ">
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }"
+                :style="{ height: item + 'px' }"></span>
             </el-option>
           </el-select>
         </div>
@@ -151,109 +84,56 @@
         <!-- 线宽 -->
         <div class="rowItem" v-if="lineStyleListShow.length > 1">
           <span class="name">{{ $t('baseStyle.style') }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.lineStyle"
-            placeholder=""
-            @change="
-              value => {
-                update('lineStyle', value)
-              }
-            "
-          >
-            <el-option
-              v-for="item in lineStyleListShow"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-              class="lineStyleOption"
-              :class="{
+          <el-select size="mini" style="width: 80px" v-model="style.lineStyle" placeholder="" @change="value => {
+              update('lineStyle', value)
+            }
+            ">
+            <el-option v-for="item in lineStyleListShow" :key="item.value" :label="item.name" :value="item.value"
+              class="lineStyleOption" :class="{
                 isDark: isDark,
                 isSelected: style.lineStyle === item.value
-              }"
-              v-html="lineStyleMap[item.value]"
-            >
+              }" v-html="lineStyleMap[item.value]">
             </el-option>
           </el-select>
         </div>
         <!-- 根节点连线样式 -->
-        <div
-          class="rowItem"
-          v-if="
-            style.lineStyle === 'curve' && showRootLineKeepSameInCurveLayouts
-          "
-        >
+        <div class="rowItem" v-if="
+          style.lineStyle === 'curve' && showRootLineKeepSameInCurveLayouts
+        ">
           <span class="name">{{ $t('baseStyle.rootStyle') }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.rootLineKeepSameInCurve"
-            placeholder=""
-            @change="
-              value => {
-                update('rootLineKeepSameInCurve', value)
-              }
-            "
-          >
-            <el-option
-              v-for="item in rootLineKeepSameInCurveList"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-            >
+          <el-select size="mini" style="width: 80px" v-model="style.rootLineKeepSameInCurve" placeholder="" @change="value => {
+              update('rootLineKeepSameInCurve', value)
+            }
+            ">
+            <el-option v-for="item in rootLineKeepSameInCurveList" :key="item.value" :label="item.name"
+              :value="item.value">
             </el-option>
           </el-select>
         </div>
         <div class="rowItem" v-if="showLineRadius">
           <!-- 连线圆角大小 -->
           <span class="name">{{ $t('baseStyle.lineRadius') }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.lineRadius"
-            placeholder=""
-            @change="
-              value => {
-                update('lineRadius', value)
-              }
-            "
-          >
-            <el-option
-              v-for="item in [0, 2, 5, 7, 10, 12, 15]"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
+          <el-select size="mini" style="width: 80px" v-model="style.lineRadius" placeholder="" @change="value => {
+              update('lineRadius', value)
+            }
+            ">
+            <el-option v-for="item in [0, 2, 5, 7, 10, 12, 15]" :key="item" :label="item" :value="item">
             </el-option>
           </el-select>
         </div>
       </div>
       <div class="row">
         <!-- 根节点连线起始位置 -->
-        <div
-          class="rowItem"
-          v-if="
-            style.lineStyle === 'curve' && showRootLineKeepSameInCurveLayouts
-          "
-        >
+        <div class="rowItem" v-if="
+          style.lineStyle === 'curve' && showRootLineKeepSameInCurveLayouts
+        ">
           <span class="name">{{ $t('baseStyle.rootLineStartPos') }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.rootLineStartPositionKeepSameInCurve"
-            placeholder=""
-            @change="
-              value => {
+          <el-select size="mini" style="width: 80px" v-model="style.rootLineStartPositionKeepSameInCurve" placeholder=""
+            @change="value => {
                 update('rootLineStartPositionKeepSameInCurve', value)
               }
-            "
-          >
-            <el-option
-              key="center"
-              :label="$t('baseStyle.center')"
-              :value="false"
-            >
+              ">
+            <el-option key="center" :label="$t('baseStyle.center')" :value="false">
             </el-option>
             <el-option key="right" :label="$t('baseStyle.edge')" :value="true">
             </el-option>
@@ -262,110 +142,60 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <el-checkbox
-            v-model="style.showLineMarker"
-            @change="
-              value => {
-                update('showLineMarker', value)
-              }
-            "
-            >{{ $t('baseStyle.showArrow') }}</el-checkbox
-          >
+          <el-checkbox v-model="style.showLineMarker" @change="value => {
+              update('showLineMarker', value)
+            }
+            ">{{ $t('baseStyle.showArrow') }}</el-checkbox>
         </div>
       </div>
       <!-- 流动效果 -->
       <div class="row" v-if="supportLineFlow">
         <div class="rowItem">
           <span class="name">{{ $t('style.openLineFlow') }}</span>
-          <el-checkbox
-            v-model="style.lineFlow"
-            @change="
-              value => {
-                update('lineFlow', value)
-              }
-            "
-          ></el-checkbox>
+          <el-checkbox v-model="style.lineFlow" @change="value => {
+              update('lineFlow', value)
+            }
+            "></el-checkbox>
         </div>
         <div class="rowItem">
           <span class="name">{{ $t('style.direction') }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.lineFlowForward"
-            placeholder=""
-            @change="
-              value => {
-                update('lineFlowForward', value)
-              }
-            "
-          >
-            <el-option
-              key="1"
-              :label="$t('style.forward')"
-              :value="true"
-            ></el-option>
-            <el-option
-              key="2"
-              :label="$t('style.reverse')"
-              :value="false"
-            ></el-option>
+          <el-select size="mini" style="width: 80px" v-model="style.lineFlowForward" placeholder="" @change="value => {
+              update('lineFlowForward', value)
+            }
+            ">
+            <el-option key="1" :label="$t('style.forward')" :value="true"></el-option>
+            <el-option key="2" :label="$t('style.reverse')" :value="false"></el-option>
           </el-select>
         </div>
       </div>
       <div class="row" v-if="supportLineFlow">
         <div class="rowItem">
           <span class="name">{{ $t('style.lineFlowDuration') }}</span>
-          <el-input-number
-            v-model="style.lineFlowDuration"
-            @change="
-              value => {
-                update('lineFlowDuration', value)
-              }
-            "
-            :min="0.1"
-            size="mini"
-            :step="0.5"
-          ></el-input-number>
+          <el-input-number v-model="style.lineFlowDuration" @change="value => {
+              update('lineFlowDuration', value)
+            }
+            " :min="0.1" size="mini" :step="0.5"></el-input-number>
         </div>
       </div>
       <!-- 彩虹线条 -->
       <div class="title noTop">{{ $t('baseStyle.rainbowLines') }}</div>
       <div class="row">
         <div class="rowItem">
-          <el-popover
-            placement="right"
-            trigger="click"
-            v-model="rainbowLinesPopoverVisible"
-          >
+          <el-popover placement="right" trigger="click" v-model="rainbowLinesPopoverVisible">
             <div class="rainbowLinesOptionsBox" :class="{ isDark: isDark }">
-              <div
-                class="optionItem"
-                v-for="item in rainbowLinesOptions"
-                :key="item.value"
-              >
-                <div
-                  class="colorsBar"
-                  v-if="item.list"
-                  @click="updateRainbowLinesConfig(item)"
-                >
-                  <span
-                    class="colorItem"
-                    v-for="color in item.list"
-                    :style="{ backgroundColor: color }"
-                  ></span>
+              <div class="optionItem" v-for="item in rainbowLinesOptions" :key="item.value">
+                <div class="colorsBar" v-if="item.list" @click="updateRainbowLinesConfig(item)">
+                  <span class="colorItem" v-for="color in item.list" :style="{ backgroundColor: color }"></span>
                 </div>
                 <span v-else @click="updateRainbowLinesConfig(item)">{{
                   $t('baseStyle.notUseRainbowLines')
-                }}</span>
+                  }}</span>
               </div>
             </div>
             <div slot="reference" class="curRainbowLine">
               <div class="colorsBar" v-if="curRainbowLineColorList">
-                <span
-                  class="colorItem"
-                  v-for="color in curRainbowLineColorList"
-                  :style="{ backgroundColor: color }"
-                ></span>
+                <span class="colorItem" v-for="color in curRainbowLineColorList"
+                  :style="{ backgroundColor: color }"></span>
               </div>
               <span v-else>{{ $t('baseStyle.notUseRainbowLines') }}</span>
             </div>
@@ -377,47 +207,23 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.color') }}</span>
-          <span
-            class="block"
-            v-popover:popover2
-            :style="{ backgroundColor: style.generalizationLineColor }"
-          ></span>
+          <span class="block" v-popover:popover2 :style="{ backgroundColor: style.generalizationLineColor }"></span>
           <el-popover ref="popover2" placement="bottom" trigger="click">
-            <Color
-              :color="style.generalizationLineColor"
-              @change="
-                color => {
-                  update('generalizationLineColor', color)
-                }
-              "
-            ></Color>
+            <Color :color="style.generalizationLineColor" @change="color => {
+                update('generalizationLineColor', color)
+              }
+              "></Color>
           </el-popover>
         </div>
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.width') }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.generalizationLineWidth"
-            placeholder=""
-            @change="
-              value => {
-                update('generalizationLineWidth', value)
-              }
-            "
-          >
-            <el-option
-              v-for="item in lineWidthList"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
-              <span
-                v-if="item > 0"
-                class="borderLine"
-                :class="{ isDark: isDark }"
-                :style="{ height: item + 'px' }"
-              ></span>
+          <el-select size="mini" style="width: 80px" v-model="style.generalizationLineWidth" placeholder="" @change="value => {
+              update('generalizationLineWidth', value)
+            }
+            ">
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }"
+                :style="{ height: item + 'px' }"></span>
             </el-option>
           </el-select>
         </div>
@@ -427,47 +233,23 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.associativeLineColor') }}</span>
-          <span
-            class="block"
-            v-popover:popover4
-            :style="{ backgroundColor: style.associativeLineColor }"
-          ></span>
+          <span class="block" v-popover:popover4 :style="{ backgroundColor: style.associativeLineColor }"></span>
           <el-popover ref="popover4" placement="bottom" trigger="click">
-            <Color
-              :color="style.associativeLineColor"
-              @change="
-                color => {
-                  update('associativeLineColor', color)
-                }
-              "
-            ></Color>
+            <Color :color="style.associativeLineColor" @change="color => {
+                update('associativeLineColor', color)
+              }
+              "></Color>
           </el-popover>
         </div>
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.associativeLineWidth') }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.associativeLineWidth"
-            placeholder=""
-            @change="
-              value => {
-                update('associativeLineWidth', value)
-              }
-            "
-          >
-            <el-option
-              v-for="item in lineWidthList"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
-              <span
-                v-if="item > 0"
-                class="borderLine"
-                :class="{ isDark: isDark }"
-                :style="{ height: item + 'px' }"
-              ></span>
+          <el-select size="mini" style="width: 80px" v-model="style.associativeLineWidth" placeholder="" @change="value => {
+              update('associativeLineWidth', value)
+            }
+            ">
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }"
+                :style="{ height: item + 'px' }"></span>
             </el-option>
           </el-select>
         </div>
@@ -476,50 +258,26 @@
         <div class="rowItem">
           <span class="name">{{
             $t('baseStyle.associativeLineActiveColor')
-          }}</span>
-          <span
-            class="block"
-            v-popover:popover5
-            :style="{ backgroundColor: style.associativeLineActiveColor }"
-          ></span>
+            }}</span>
+          <span class="block" v-popover:popover5 :style="{ backgroundColor: style.associativeLineActiveColor }"></span>
           <el-popover ref="popover5" placement="bottom" trigger="click">
-            <Color
-              :color="style.associativeLineActiveColor"
-              @change="
-                color => {
-                  update('associativeLineActiveColor', color)
-                }
-              "
-            ></Color>
+            <Color :color="style.associativeLineActiveColor" @change="color => {
+                update('associativeLineActiveColor', color)
+              }
+              "></Color>
           </el-popover>
         </div>
         <div class="rowItem">
           <span class="name">{{
             $t('baseStyle.associativeLineActiveWidth')
-          }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.associativeLineActiveWidth"
-            placeholder=""
-            @change="
-              value => {
-                update('associativeLineActiveWidth', value)
-              }
-            "
-          >
-            <el-option
-              v-for="item in lineWidthList"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
-              <span
-                v-if="item > 0"
-                class="borderLine"
-                :class="{ isDark: isDark }"
-                :style="{ height: item + 'px' }"
-              ></span>
+            }}</span>
+          <el-select size="mini" style="width: 80px" v-model="style.associativeLineActiveWidth" placeholder="" @change="value => {
+              update('associativeLineActiveWidth', value)
+            }
+            ">
+            <el-option v-for="item in lineWidthList" :key="item" :label="item" :value="item">
+              <span v-if="item > 0" class="borderLine" :class="{ isDark: isDark }"
+                :style="{ height: item + 'px' }"></span>
             </el-option>
           </el-select>
         </div>
@@ -527,39 +285,18 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('style.style') }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.associativeLineDasharray"
-            placeholder=""
-            @change="
-              value => {
-                update('associativeLineDasharray', value)
-              }
-            "
-          >
-            <el-option
-              v-for="item in borderDasharrayList"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-            >
+          <el-select size="mini" style="width: 80px" v-model="style.associativeLineDasharray" placeholder="" @change="value => {
+              update('associativeLineDasharray', value)
+            }
+            ">
+            <el-option v-for="item in borderDasharrayList" :key="item.value" :label="item.name" :value="item.value">
               <svg width="120" height="34">
-                <line
-                  x1="10"
-                  y1="17"
-                  x2="110"
-                  y2="17"
-                  stroke-width="2"
-                  :stroke="
-                    style.associativeLineDasharray === item.value
-                      ? '#409eff'
-                      : isDark
+                <line x1="10" y1="17" x2="110" y2="17" stroke-width="2" :stroke="style.associativeLineDasharray === item.value
+                    ? '#409eff'
+                    : isDark
                       ? '#fff'
                       : '#000'
-                  "
-                  :stroke-dasharray="item.value"
-                ></line>
+                  " :stroke-dasharray="item.value"></line>
               </svg>
             </el-option>
           </el-select>
@@ -570,19 +307,10 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.fontFamily') }}</span>
-          <el-select
-            size="mini"
-            v-model="style.associativeLineTextFontFamily"
-            placeholder=""
-            @change="update('associativeLineTextFontFamily', $event)"
-          >
-            <el-option
-              v-for="item in fontFamilyList"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-              :style="{ fontFamily: item.value }"
-            >
+          <el-select size="mini" v-model="style.associativeLineTextFontFamily" placeholder=""
+            @change="update('associativeLineTextFontFamily', $event)">
+            <el-option v-for="item in fontFamilyList" :key="item.value" :label="item.name" :value="item.value"
+              :style="{ fontFamily: item.value }">
             </el-option>
           </el-select>
         </div>
@@ -590,38 +318,20 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.color') }}</span>
-          <span
-            class="block"
-            v-popover:popover6
-            :style="{ backgroundColor: style.associativeLineTextColor }"
-          ></span>
+          <span class="block" v-popover:popover6 :style="{ backgroundColor: style.associativeLineTextColor }"></span>
           <el-popover ref="popover6" placement="bottom" trigger="click">
-            <Color
-              :color="style.associativeLineTextColor"
-              @change="
-                color => {
-                  update('associativeLineTextColor', color)
-                }
-              "
-            ></Color>
+            <Color :color="style.associativeLineTextColor" @change="color => {
+                update('associativeLineTextColor', color)
+              }
+              "></Color>
           </el-popover>
         </div>
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.fontSize') }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.associativeLineTextFontSize"
-            placeholder=""
-            @change="update('associativeLineTextFontSize', $event)"
-          >
-            <el-option
-              v-for="item in fontSizeList"
-              :key="item"
-              :label="item"
-              :value="item"
-              :style="{ fontSize: item + 'px' }"
-            >
+          <el-select size="mini" style="width: 80px" v-model="style.associativeLineTextFontSize" placeholder=""
+            @change="update('associativeLineTextFontSize', $event)">
+            <el-option v-for="item in fontSizeList" :key="item" :label="item" :value="item"
+              :style="{ fontSize: item + 'px' }">
             </el-option>
           </el-select>
         </div>
@@ -631,15 +341,10 @@
         <div class="title noTop">{{ $t('baseStyle.nodeBorderType') }}</div>
         <div class="row">
           <div class="rowItem">
-            <el-checkbox
-              v-model="style.nodeUseLineStyle"
-              @change="
-                value => {
-                  update('nodeUseLineStyle', value)
-                }
-              "
-              >{{ $t('baseStyle.nodeUseLineStyle') }}</el-checkbox
-            >
+            <el-checkbox v-model="style.nodeUseLineStyle" @change="value => {
+                update('nodeUseLineStyle', value)
+              }
+              ">{{ $t('baseStyle.nodeUseLineStyle') }}</el-checkbox>
           </div>
         </div>
       </template>
@@ -648,29 +353,19 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.horizontal') }}</span>
-          <el-slider
-            style="width: 200px"
-            v-model="style.paddingX"
-            @change="
-              value => {
-                update('paddingX', value)
-              }
-            "
-          ></el-slider>
+          <el-slider style="width: 200px" v-model="style.paddingX" @change="value => {
+              update('paddingX', value)
+            }
+            "></el-slider>
         </div>
       </div>
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.vertical') }}</span>
-          <el-slider
-            style="width: 200px"
-            v-model="style.paddingY"
-            @change="
-              value => {
-                update('paddingY', value)
-              }
-            "
-          ></el-slider>
+          <el-slider style="width: 200px" v-model="style.paddingY" @change="value => {
+              update('paddingY', value)
+            }
+            "></el-slider>
         </div>
       </div>
       <!-- 图片 -->
@@ -678,33 +373,19 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.maximumWidth') }}</span>
-          <el-slider
-            style="width: 140px"
-            v-model="style.imgMaxWidth"
-            :min="10"
-            :max="500"
-            @change="
-              value => {
-                update('imgMaxWidth', value)
-              }
-            "
-          ></el-slider>
+          <el-slider style="width: 140px" v-model="style.imgMaxWidth" :min="10" :max="500" @change="value => {
+              update('imgMaxWidth', value)
+            }
+            "></el-slider>
         </div>
       </div>
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.maximumHeight') }}</span>
-          <el-slider
-            style="width: 140px"
-            v-model="style.imgMaxHeight"
-            :min="10"
-            :max="500"
-            @change="
-              value => {
-                update('imgMaxHeight', value)
-              }
-            "
-          ></el-slider>
+          <el-slider style="width: 140px" v-model="style.imgMaxHeight" :min="10" :max="500" @change="value => {
+              update('imgMaxHeight', value)
+            }
+            "></el-slider>
         </div>
       </div>
       <!-- 图标 -->
@@ -712,61 +393,32 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.size') }}</span>
-          <el-slider
-            style="width: 200px"
-            v-model="style.iconSize"
-            :min="12"
-            :max="50"
-            @change="
-              value => {
-                update('iconSize', value)
-              }
-            "
-          ></el-slider>
+          <el-slider style="width: 200px" v-model="style.iconSize" :min="12" :max="50" @change="value => {
+              update('iconSize', value)
+            }
+            "></el-slider>
         </div>
       </div>
       <!-- 二级节点外边距 -->
       <div class="title noTop">{{ $t('baseStyle.nodeMargin') }}</div>
       <div class="row column">
-        <el-tabs
-          class="tab"
-          v-model="marginActiveTab"
-          @tab-click="initMarginStyle"
-        >
-          <el-tab-pane
-            :label="$t('baseStyle.level2Node')"
-            name="second"
-          ></el-tab-pane>
-          <el-tab-pane
-            :label="$t('baseStyle.belowLevel2Node')"
-            name="node"
-          ></el-tab-pane>
+        <el-tabs class="tab" v-model="marginActiveTab" @tab-click="initMarginStyle">
+          <el-tab-pane :label="$t('baseStyle.level2Node')" name="second"></el-tab-pane>
+          <el-tab-pane :label="$t('baseStyle.belowLevel2Node')" name="node"></el-tab-pane>
         </el-tabs>
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.horizontal') }}</span>
-          <el-slider
-            :max="200"
-            style="width: 200px"
-            v-model="style.marginX"
-            @change="
-              value => {
-                updateMargin('marginX', value)
-              }
-            "
-          ></el-slider>
+          <el-slider :max="200" style="width: 200px" v-model="style.marginX" @change="value => {
+              updateMargin('marginX', value)
+            }
+            "></el-slider>
         </div>
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.vertical') }}</span>
-          <el-slider
-            :max="200"
-            style="width: 200px"
-            v-model="style.marginY"
-            @change="
-              value => {
-                updateMargin('marginY', value)
-              }
-            "
-          ></el-slider>
+          <el-slider :max="200" style="width: 200px" v-model="style.marginY" @change="value => {
+              updateMargin('marginY', value)
+            }
+            "></el-slider>
         </div>
       </div>
       <!-- 外框内边距 -->
@@ -774,29 +426,19 @@
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.horizontal') }}</span>
-          <el-slider
-            style="width: 200px"
-            v-model="outerFramePadding.outerFramePaddingX"
-            @change="
-              value => {
-                updateOuterFramePadding('outerFramePaddingX', value)
-              }
-            "
-          ></el-slider>
+          <el-slider style="width: 200px" v-model="outerFramePadding.outerFramePaddingX" @change="value => {
+              updateOuterFramePadding('outerFramePaddingX', value)
+            }
+            "></el-slider>
         </div>
       </div>
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.vertical') }}</span>
-          <el-slider
-            style="width: 200px"
-            v-model="outerFramePadding.outerFramePaddingY"
-            @change="
-              value => {
-                updateOuterFramePadding('outerFramePaddingY', value)
-              }
-            "
-          ></el-slider>
+          <el-slider style="width: 200px" v-model="outerFramePadding.outerFramePaddingY" @change="value => {
+              updateOuterFramePadding('outerFramePaddingY', value)
+            }
+            "></el-slider>
         </div>
       </div>
     </div>
@@ -894,6 +536,11 @@ export default {
       },
       rainbowLinesPopoverVisible: false,
       curRainbowLineColorList: null,
+      updateWatermarkTimer: null,
+      enableNodeRichText: true,
+      localConfigs: {
+        isShowScrollbar: true
+      },
       currentLayout: '', // 当前结构
       outerFramePadding: {
         outerFramePaddingX: 0,
@@ -1130,6 +777,7 @@ export default {
 
     .row {
       .rowItem {
+
         .name,
         .curRainbowLine {
           color: hsla(0, 0%, 100%, 0.6);

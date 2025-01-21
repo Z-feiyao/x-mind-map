@@ -5,7 +5,7 @@
   >
     <template v-if="show">
       <Toolbar v-if="!isZenMode"></Toolbar>
-      <Edit></Edit>
+      <Edit :mindMapId="mindMapId"></Edit>
     </template>
   </div>
 </template>
@@ -24,7 +24,8 @@ export default {
   },
   data() {
     return {
-      show: false
+      show: false,
+      mindMapId: ''
     }
   },
   computed: {
@@ -40,18 +41,19 @@ export default {
     }
   },
   async created() {
+    this.mindMapId = this.$route.params.id
     this.initLocalConfig()
     const loading = this.$loading({
       lock: true,
       text: this.$t('other.loading')
     })
-    await this.getUserMindMapData()
+    await this.getMindMap(this.mindMapId)
     this.show = true
     loading.close()
     this.setBodyDark()
   },
   methods: {
-    ...mapActions(['getUserMindMapData']),
+    ...mapActions(['initLocalConfig', 'getMindMap']),
     ...mapMutations(['setLocalConfig']),
 
     /**
@@ -70,9 +72,11 @@ export default {
     },
 
     setBodyDark() {
-      this.isDark
-        ? document.body.classList.add('isDark')
-        : document.body.classList.remove('isDark')
+      if (this.isDark) {
+        document.body.classList.add('isDark')
+      } else {
+        document.body.classList.remove('isDark')
+      }
     }
   }
 }

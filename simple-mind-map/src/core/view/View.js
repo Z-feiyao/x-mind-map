@@ -396,7 +396,6 @@ class View {
     right -= scaleOffset * centerX - centerXChange
     top -= scaleOffset * centerY - centerYChange
     bottom -= scaleOffset * centerY - centerYChange
-
     // 判断是否超出边界
     if (this.x > left) {
       this.x = left
@@ -421,10 +420,11 @@ class View {
       rootRect.width,
       rootRect.height
     )
-    const left = rootRect.x - drawRect.x - rootCenterOffset.x * scaleX
-    const right = rootRect.x - drawRect.x2 - rootCenterOffset.x * scaleX
-    const top = rootRect.y - drawRect.y - rootCenterOffset.y * scaleY
-    const bottom = rootRect.y - drawRect.y2 - rootCenterOffset.y * scaleY
+    // pref: 滚动条模式下，增加可以移动的范围
+    const left = rootRect.x - drawRect.x - rootCenterOffset.x * scaleX + 200
+    const right = rootRect.x - drawRect.x2 - rootCenterOffset.x * scaleX - 200
+    const top = rootRect.y - drawRect.y - rootCenterOffset.y * scaleY + 50
+    const bottom = rootRect.y - drawRect.y2 - rootCenterOffset.y * scaleY - 50
     return {
       scale: scaleX,
       left,

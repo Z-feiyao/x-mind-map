@@ -104,10 +104,6 @@ export const storeConfig = config => {
  * @Desc: 存储语言
  */
 export const storeLang = lang => {
-  if (window.takeOverApp) {
-    window.takeOverAppMethods.saveLanguage(lang)
-    return
-  }
   localStorage.setItem(SIMPLE_MIND_MAP_LANG, lang)
 }
 
@@ -118,9 +114,6 @@ export const storeLang = lang => {
  * @Desc: 获取存储的语言
  */
 export const getLang = () => {
-  if (window.takeOverApp) {
-    return window.takeOverAppMethods.getLanguage() || 'zh'
-  }
   let lang = localStorage.getItem(SIMPLE_MIND_MAP_LANG)
   if (lang) {
     return lang
@@ -136,9 +129,6 @@ export const getLang = () => {
  * @Desc: 存储本地配置
  */
 export const storeLocalConfig = config => {
-  if (window.takeOverApp) {
-    return window.takeOverAppMethods.saveLocalConfig(config)
-  }
   localStorage.setItem(SIMPLE_MIND_MAP_LOCAL_CONFIG, JSON.stringify(config))
 }
 
@@ -149,9 +139,6 @@ export const storeLocalConfig = config => {
  * @Desc: 获取本地配置
  */
 export const getLocalConfig = () => {
-  if (window.takeOverApp) {
-    return window.takeOverAppMethods.getLocalConfig()
-  }
   let config = localStorage.getItem(SIMPLE_MIND_MAP_LOCAL_CONFIG)
   if (config) {
     return JSON.parse(config)

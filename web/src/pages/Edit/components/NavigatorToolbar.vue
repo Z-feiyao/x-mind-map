@@ -1,21 +1,6 @@
 <template>
   <div class="navigatorContainer" :class="{ isDark: isDark }">
     <div class="item">
-      <el-select
-        v-model="lang"
-        size="small"
-        style="width: 100px"
-        @change="onLangChange"
-      >
-        <el-option
-          v-for="item in langList"
-          :key="item.value"
-          :label="item.name"
-          :value="item.value"
-        />
-      </el-select>
-    </div>
-    <div class="item">
       <el-tooltip
         effect="dark"
         :content="$t('navigatorToolbar.backToRoot')"
@@ -44,13 +29,6 @@
       </el-tooltip>
     </div>
     <div class="item">
-      <!-- <el-switch
-        v-model="isReadonly"
-        :active-text="$t('navigatorToolbar.readonly')"
-        :inactive-text="$t('navigatorToolbar.edit')"
-        @change="readonlyChange"
-      >
-      </el-switch> -->
       <el-tooltip
         effect="dark"
         :content="
@@ -81,25 +59,13 @@
       ></div>
     </div>
     <div class="item">
-      <el-tooltip
-        effect="dark"
-        :content="$t('navigatorToolbar.changeSourceCodeEdit')"
-        placement="top"
-      >
-        <div class="btn iconfont iconyuanma" @click="openSourceCodeEdit"></div>
-      </el-tooltip>
-    </div>
-    <div class="item">
       <Demonstrate :isDark="isDark" :mindMap="mindMap"></Demonstrate>
     </div>
     <div class="item">
       <el-dropdown @command="handleCommand">
         <div class="btn iconfont iconbangzhu"></div>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="github">Github</el-dropdown-item>
           <el-dropdown-item command="helpDoc">使用文档</el-dropdown-item>
-          <el-dropdown-item command="devDoc">开发文档</el-dropdown-item>
-          <el-dropdown-item command="site">官方网站</el-dropdown-item>
           <el-dropdown-item command="issue">意见反馈</el-dropdown-item>
           <el-dropdown-item disabled>当前：v{{ version }}</el-dropdown-item>
         </el-dropdown-menu>
@@ -213,10 +179,6 @@ export default {
     backToRoot() {
       this.mindMap.renderer.setRootNodeCenter()
     },
-
-    openSourceCodeEdit() {
-      this.setIsSourceCodeEdit(true)
-    }
   }
 }
 </script>
@@ -225,7 +187,7 @@ export default {
 .navigatorContainer {
   padding: 0 12px;
   position: fixed;
-  right: 20px;
+  right: 100px;
   bottom: 20px;
   background: hsla(0, 0%, 100%, 0.8);
   border-radius: 5px;

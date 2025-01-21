@@ -221,16 +221,7 @@
           >
         </div>
       </div>
-      <!-- 是否开启手绘风格 -->
-      <div class="row" v-if="supportHandDrawnLikeStyle">
-        <div class="rowItem">
-          <el-checkbox
-            v-model="localConfigs.isUseHandDrawnLikeStyle"
-            @change="updateLocalConfig('isUseHandDrawnLikeStyle', $event)"
-            >{{ $t('setting.isUseHandDrawnLikeStyle') }}</el-checkbox
-          >
-        </div>
-      </div>
+
       <!-- 配置鼠标滚轮行为 -->
       <div class="row">
         <div class="rowItem">
@@ -392,7 +383,6 @@ export default {
       enableNodeRichText: true,
       localConfigs: {
         isShowScrollbar: false,
-        isUseHandDrawnLikeStyle: false
       }
     }
   },
@@ -401,7 +391,6 @@ export default {
       activeSidebar: state => state.activeSidebar,
       localConfig: state => state.localConfig,
       isDark: state => state.localConfig.isDark,
-      supportHandDrawnLikeStyle: state => state.supportHandDrawnLikeStyle
     })
   },
   watch: {
@@ -434,7 +423,7 @@ export default {
       this.enableNodeRichText = this.localConfig.openNodeRichText
       this.mousewheelAction = this.localConfig.mousewheelAction
       this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
-      ;['isShowScrollbar', 'isUseHandDrawnLikeStyle'].forEach(key => {
+      ;['isShowScrollbar'].forEach(key => {
         this.localConfigs[key] = this.localConfig[key]
       })
     },

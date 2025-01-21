@@ -1,14 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import exampleData from 'simple-mind-map/example/exampleData'
-import { storeLocalConfig } from '@/api'
+import { storeLocalConfig, getConfig, setConfig } from '@/api'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    mindMapData: null, // 思维导图数据
-    isHandleLocalFile: false, // 是否操作的是本地文件
+    // 公共配置
     localConfig: {
       // 本地配置
       isZenMode: false, // 是否是禅模式
@@ -17,25 +16,25 @@ const store = new Vuex.Store({
       // 鼠标行为
       useLeftKeySelectionRightKeyDrag: false,
       // 是否显示滚动条
-      isShowScrollbar: false,
-      // 是否开启手绘风格
-      isUseHandDrawnLikeStyle: false,
+      isShowScrollbar: true,
       // 是否是暗黑模式
-      isDark: false
+      isDark: false,
+      extraTextOnExport: '',
     },
+    
+    mindMapData: null, // 思维导图数据
+    isHandleLocalFile: false, // 是否操作的是本地文件
     activeSidebar: '', // 当前显示的侧边栏
     isOutlineEdit: false, // 是否是大纲编辑模式
     isReadonly: false, // 是否只读
-    isSourceCodeEdit: false, // 是否是源码编辑模式
-    extraTextOnExport: '', // 导出时底部添加的文字
-    supportHandDrawnLikeStyle: false, // 是否支持设置手绘风格
     supportMark: false, // 是否支持标记
     supportNumbers: false, // 是否支持编号
     supportFreemind: false, // 是否支持Freemind插件
     supportExcel: false, // 是否支持Excel插件
     supportCheckbox: false, // 是否支持Checkbox插件
     supportLineFlow: false, // 是否支持LineFlow插件
-    isDragOutlineTreeNode: false // 当前是否正在拖拽大纲树的节点
+    isDragOutlineTreeNode: false, // 当前是否正在拖拽大纲树的节点
+    mindMaps: {} // 存储多个脑图的数据
   },
   mutations: {
     // 设置思维导图数据
@@ -72,19 +71,10 @@ const store = new Vuex.Store({
       state.isReadonly = data
     },
 
-    // 设置源码编辑模式
-    setIsSourceCodeEdit(state, data) {
-      state.isSourceCodeEdit = data
-    },
 
     // 设置导出时底部添加的文字
     setExtraTextOnExport(state, data) {
-      state.extraTextOnExport = data
-    },
-
-    // 设置是否支持手绘风格
-    setSupportHandDrawnLikeStyle(state, data) {
-      state.supportHandDrawnLikeStyle = data
+      state.localConfig.extraTextOnExport = data
     },
 
     // 设置是否支持标记
@@ -120,11 +110,30 @@ const store = new Vuex.Store({
     // 设置树节点拖拽
     setIsDragOutlineTreeNode(state, data) {
       state.isDragOutlineTreeNode = data
+    },
+
+    SET_LOCAL_CONFIG(state, config) {
+      state.localConfig = config
+    },
+
+    SET_ACTIVE_SIDEBAR(state, status) {
+      state.activeSidebar = status
+    },
+
+    SET_MIND_MAP(state, { id, data }) {
+      Vue.set(state.mindMaps, id, data)
+    },
+
+    UPDATE_MIND_MAP(state, { id, data }) {
+      if (state.mindMaps[id]) {
+        state.mindMaps[id] = { ...state.mindMaps[id], ...data }
+      }
     }
   },
   actions: {
     // 设置初始思维导图数据
-    getUserMindMapData(ctx) {
+    async getUserMindMapData(ctx) {
+      console.log('ctx -> ', ctx);
       try {
         let { data } = {
           data: {
@@ -136,6 +145,24 @@ const store = new Vuex.Store({
         ctx.commit('setMindMapData', data.data)
       } catch (error) {
         console.log(error)
+      }
+    },
+    async initLocalConfig({ commit }) {
+      const config = await getConfig()
+      commit('SET_LOCAL_CONFIG', config)
+    },
+    async saveLocalConfig({ state }) {
+      await setConfig(state.localConfig)
+    },
+    async getMindMap({ commit }, id) {
+      // 这里需要实现从后端获取脑图数据的逻辑
+      const data = {} // 临时使用getConfig代替
+      commit('SET_MIND_MAP', { id, data })
+    },
+    async saveMindMap({ state }, id) {
+      if (state.mindMaps[id]) {
+        // 这里需要实现保存脑图数据到后端的逻辑
+        await setConfig(state.mindMaps[id])
       }
     }
   }

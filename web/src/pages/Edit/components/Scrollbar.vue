@@ -134,8 +134,8 @@ export default {
 
     &.verticalScrollbar {
       width: 10px;
-      top: 100px;
-      bottom: 100px;
+      top: 30px;
+      bottom: 80px;
       left: 20px;
 
       .scrollbarInner {
@@ -148,7 +148,7 @@ export default {
       height: 10px;
       left: 100px;
       right: 100px;
-      bottom: 70px;
+      bottom: 10px;
 
       .scrollbarInner {
         height: 10px;
