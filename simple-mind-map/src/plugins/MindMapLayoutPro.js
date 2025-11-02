@@ -1,15 +1,13 @@
 import { CONSTANTS } from '../constants/constant'
 
-// 该插件会向节点数据的data中添加dir字段
-/*
-  需要更新数据的情况：
-
-   1.实例化时的数据
-   2.调用setData和updateData方法
-   3.执行完命令
-   4.切换结构
-*/
-
+/**
+ * 该插件会向节点数据的data中添加dir字段 
+ * 需要更新数据的情况：
+ *   1.实例化时的数据
+ *   2.调用setData和updateData方法
+ *   3.执行完命令
+ *   4.切换结构
+ */
 class MindMapLayoutPro {
   constructor(opt) {
     this.opt = opt

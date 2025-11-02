@@ -24,18 +24,6 @@
         <span class="text">{{ $t('toolbar.redo') }}</span>
       </div>
       <div
-        v-if="item === 'painter'"
-        class="toolbarBtn"
-        :class="{
-          disabled: activeNodes.length <= 0 || hasGeneralization,
-          active: isInPainter
-        }"
-        @click="$bus.$emit('startPainter')"
-      >
-        <span class="icon iconfont iconjiedian"></span>
-        <span class="text">{{ $t('toolbar.painter') }}</span>
-      </div>
-      <div
         v-if="item === 'siblingNode'"
         class="toolbarBtn"
         :class="{
@@ -146,17 +134,6 @@
         <span class="text">{{ $t('toolbar.associativeLine') }}</span>
       </div>
       <div
-        v-if="item === 'formula'"
-        class="toolbarBtn"
-        :class="{
-          disabled: activeNodes.length <= 0 || hasGeneralization
-        }"
-        @click="showFormula"
-      >
-        <span class="icon iconfont icongongshi"></span>
-        <span class="text">{{ $t('toolbar.formula') }}</span>
-      </div>
-      <div
         v-if="item === 'attachment'"
         class="toolbarBtn"
         :class="{
@@ -214,7 +191,6 @@ export default {
       readonly: false,
       isFullDataFile: false,
       timer: null,
-      isInPainter: false
     }
   },
   computed: {
@@ -241,15 +217,11 @@ export default {
     this.$bus.$on('mode_change', this.onModeChange)
     this.$bus.$on('node_active', this.onNodeActive)
     this.$bus.$on('back_forward', this.onBackForward)
-    this.$bus.$on('painter_start', this.onPainterStart)
-    this.$bus.$on('painter_end', this.onPainterEnd)
   },
   beforeDestroy() {
     this.$bus.$off('mode_change', this.onModeChange)
     this.$bus.$off('node_active', this.onNodeActive)
     this.$bus.$off('back_forward', this.onBackForward)
-    this.$bus.$off('painter_start', this.onPainterStart)
-    this.$bus.$off('painter_end', this.onPainterEnd)
   },
   methods: {
     ...mapMutations(['setActiveSidebar']),
@@ -270,25 +242,10 @@ export default {
       this.forwardEnd = index >= len - 1
     },
 
-    // 开始格式刷
-    onPainterStart() {
-      this.isInPainter = true
-    },
-
-    // 格式刷结束
-    onPainterEnd() {
-      this.isInPainter = false
-    },
-
     // 显示节点图标侧边栏
     showNodeIcon() {
       this.$bus.$emit('close_node_icon_toolbar')
       this.setActiveSidebar('nodeIconSidebar')
-    },
-
-    // 打开公式侧边栏
-    showFormula() {
-      this.setActiveSidebar('formulaSidebar')
     },
 
     // 选择附件

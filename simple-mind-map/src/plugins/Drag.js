@@ -9,7 +9,9 @@ import Base from '../layouts/Base'
 import { CONSTANTS } from '../constants/constant'
 import AutoMove from '../utils/AutoMove'
 
-// 节点拖动插件
+/**
+ * 节点拖动插件
+ */
 class Drag extends Base {
   //  构造函数
   constructor({ mindMap }) {

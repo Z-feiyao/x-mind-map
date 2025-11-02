@@ -41,25 +41,28 @@ export default {
     }
   },
   async created() {
+    console.log('edit begin ...');
     this.mindMapId = this.$route.params.id
     this.initLocalConfig()
     const loading = this.$loading({
       lock: true,
       text: this.$t('other.loading')
     })
+    this.getUserMindMapData()
     await this.getMindMap(this.mindMapId)
+    console.log('edit created ...');
     this.show = true
     loading.close()
     this.setBodyDark()
   },
   methods: {
-    ...mapActions(['initLocalConfig', 'getMindMap']),
+    ...mapActions(['getMindMap','getUserMindMapData']),
     ...mapMutations(['setLocalConfig']),
 
     /**
      * @Author: 王林25
      * @Date: 2022-11-14 19:07:03
-     * @Desc: 初始化本地配置
+     * @Desc: 初始化本地配置并设置 config 状态
      */
     initLocalConfig() {
       let config = getLocalConfig()

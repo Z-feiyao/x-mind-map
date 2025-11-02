@@ -10,6 +10,7 @@ class NodeImgAdjust {
     this.isShowHandleEl = false // 自定义元素是否在显示中
     this.node = null // 当前节点实例
     this.img = null // 当前节点的图片节点
+    this.imgIndex = -1
     this.rect = null // 当前图片节点的尺寸信息
     this.isMousedown = false // 当前是否是按住调整按钮状态
     this.mousedownDrawTransform = null //鼠标按下时对当前画布的变换
@@ -116,9 +117,15 @@ class NodeImgAdjust {
 
   // 更新自定义元素宽高
   updateHandleElSize() {
+    // 获取 this.handleEl 下的 imgCount 元素并修改元素内容
+    let imgCount = this.handleEl.getElementsByClassName('node-image-imgCount')
+    if (imgCount){
+      imgCount.item(0).innerHTML = `${this.node.getData('currentImgIndex') + 1}/${this.node.getData('images').length}`
+    }
     this.handleEl.style.width = `${this.currentImgWidth}px`
     this.handleEl.style.height = `${this.currentImgHeight}px`
   }
+
 
   // 创建调整按钮元素
   createResizeBtnEl() {
@@ -175,6 +182,67 @@ class NodeImgAdjust {
       e.stopPropagation()
     })
     this.handleEl.appendChild(btnEl)
+
+    // 添加图片显示
+    let imgCount = document.createElement('div')
+    imgCount.innerHTML = `${this.node.getData('currentImgIndex') + 1}/${this.node.getData('images').length}`
+    imgCount.style.cssText = `
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #fff;
+      pointer-events: auto;
+      background-color: rgba(0, 0, 0, 0.3);
+      width: ${imgResizeBtnSize}px;
+      height: ${imgResizeBtnSize}px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: nwse-resize;
+    `
+    imgCount.className = 'node-image-imgCount'
+    imgCount.addEventListener('mouseenter', e => {
+      this.showHandleEl()
+    })
+    imgCount.addEventListener('mouseleave', () => {
+      // 移除按钮，需要隐藏按钮
+      if (this.isMousedown) return
+      this.hideHandleEl()
+    })
+
+    this.handleEl.appendChild(imgCount)
+
+    // 下一张按钮
+    const btnNext = document.createElement('div')
+    this.handleEl.prepend(btnNext)
+    btnNext.className = 'node-image-next'
+    btnNext.innerHTML = btnsSvg.openRight
+    btnNext.style.cssText = `
+      position: absolute;
+      right: 0;
+      top: 0;
+      color:#fff;
+      pointer-events: auto;
+      background-color: rgba(0, 0, 0, 0.3);
+      width: ${imgResizeBtnSize}px;
+      height: ${imgResizeBtnSize}px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    `
+    btnNext.addEventListener('mouseenter', e => {
+      this.showHandleEl()
+    })
+    btnNext.addEventListener('mouseleave', () => {
+      // 移除按钮，需要隐藏按钮
+      if (this.isMousedown) return
+      this.hideHandleEl()
+    })
+    btnNext.addEventListener('click', async e => {
+      this.mindMap.execCommand('SET_CURRENT_IMG_INDEX', this.node, this.node.getData('currentImgIndex') + 1)
+    })
+
     // 删除按钮
     const btnRemove = document.createElement('div')
     this.handleEl.prepend(btnRemove)
@@ -182,7 +250,9 @@ class NodeImgAdjust {
     btnRemove.innerHTML = btnsSvg.remove
     btnRemove.style.cssText = `
       position: absolute;
-      right: 0;top:0;color:#fff;
+      right: 0;
+      top: 25px;
+      color:#fff;
       pointer-events: auto;
       background-color: rgba(0, 0, 0, 0.3);
       width: ${imgResizeBtnSize}px;
@@ -200,6 +270,7 @@ class NodeImgAdjust {
       this.hideHandleEl()
     })
     btnRemove.addEventListener('click', async e => {
+      // todo 修改删除逻辑
       let stop = false
       if (typeof this.mindMap.opt.beforeDeleteNodeImg === 'function') {
         stop = await this.mindMap.opt.beforeDeleteNodeImg(this.node)
@@ -221,7 +292,8 @@ class NodeImgAdjust {
     this.hideNodeImage()
     this.mousedownOffset.x = e.clientX - this.rect.x2
     this.mousedownOffset.y = e.clientY - this.rect.y2
-    // 将节点图片渲染到自定义元素上
+    // 
+    console.log('onMousedown.....');
     this.handleEl.style.backgroundImage = `url(${this.node.getData('image')})`
   }
 
@@ -289,21 +361,29 @@ class NodeImgAdjust {
     // 隐藏自定义元素
     this.hideHandleEl()
     // 更新节点图片为新的大小
-    const { image, imageTitle } = this.node.getData()
+    const { images } = this.node.getData()
     const { scaleX, scaleY } = this.mousedownDrawTransform
     const newWidth = this.currentImgWidth / scaleX
     const newHeight = this.currentImgHeight / scaleY
+
     if (
       Math.abs(newWidth - this.rect.width) > 1 ||
       Math.abs(newHeight - this.rect.height) > 1
     ) {
-      this.mindMap.execCommand('SET_NODE_IMAGE', this.node, {
-        url: image,
-        title: imageTitle,
-        width: newWidth,
-        height: newHeight,
-        custom: true // 代表自定义了图片大小
-      })
+
+      for (let index = 0; index < images.length; index++) {
+        const element = images[index];
+        images[index] = {
+          height: newHeight,
+          width: newWidth,
+          url: element.url,
+          title: element.title,
+          custom: true
+        }
+
+      }
+
+      this.mindMap.execCommand('SET_NODE_IMAGES', this.node, images)
       this.isAdjusted = true
     }
     this.isMousedown = false

@@ -9,7 +9,9 @@ import {
   camelCaseToHyphen,
   getNodeRichTextStyles
 } from '../../../utils'
-import { Image as SVGImage, SVG, A, G, Rect, Text } from '@svgdotjs/svg.js'
+import {
+  Image as SVGImage, SVG, A, G, Rect, Text, Circle
+} from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
 import { noneRichTextNodeLineHeight } from '../../../constants/constant'
 
@@ -34,12 +36,19 @@ const defaultTagStyle = {
 
 //  创建图片节点
 function createImgNode() {
-  const img = this.getData('image')
-  if (!img) {
-    return
+  const images = this.getData('images') || []
+  if (images.length === 0) {
+    return null
   }
-  const imgSize = this.getImgShowSize()
-  const node = new SVGImage().load(img).size(...imgSize)
+  // 获取当前显示的图片索引
+  const currentImgIndex = this.getData('currentImgIndex') || 0
+  const currentImage = images[currentImgIndex] || images[0]
+  const imgSize = this.getImgShowSize(currentImage)
+  // 新建一个空节点
+  const node = new SVGImage().load(currentImage.url, (e) => {
+    console.log(e);
+  }).size(...imgSize)
+
   // 如果指定了加载失败显示的图片，那么加载一下图片检测是否失败
   const { defaultNodeImage } = this.mindMap.opt
   if (defaultNodeImage) {
@@ -47,11 +56,13 @@ function createImgNode() {
     imgEl.onerror = () => {
       node.load(defaultNodeImage)
     }
-    imgEl.src = img
+    imgEl.src = currentImage.url
   }
-  if (this.getData('imageTitle')) {
-    node.attr('title', this.getData('imageTitle'))
+
+  if (currentImage.title) {
+    node.attr('title', currentImage.title)
   }
+
   node.on('dblclick', e => {
     this.mindMap.emit('node_img_dblclick', this, e)
   })
@@ -72,8 +83,8 @@ function createImgNode() {
 }
 
 //  获取图片显示宽高
-function getImgShowSize() {
-  const { custom, width, height } = this.getData('imageSize')
+function getImgShowSize(imgData) {
+  const { custom, width, height } = imgData
   // 如果是自定义了图片的宽高，那么不受最大宽高限制
   if (custom) return [width, height]
   return resizeImgSize(
@@ -277,7 +288,7 @@ function createTextNode(specifyText) {
     this.style.text(node)
     node.y(
       fontSize * noneRichTextNodeLineHeight * index +
-        ((noneRichTextNodeLineHeight - 1) * fontSize) / 2
+      ((noneRichTextNodeLineHeight - 1) * fontSize) / 2
     )
     g.add(node)
   })
@@ -566,8 +577,8 @@ export default {
   createTagNode,
   createNoteNode,
   createAttachmentNode,
-  getNoteContentPosition,
   getNodeIconSize,
+  getNoteContentPosition,
   measureCustomNodeContentSize,
   isUseCustomNodeContent
 }

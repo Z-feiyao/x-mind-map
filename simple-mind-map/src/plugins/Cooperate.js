@@ -9,7 +9,9 @@ import {
   transformObjectToTreeData
 } from '../utils/index'
 
-// 协同插件
+/**
+ * 协同插件
+ */
 class Cooperate {
   constructor(opt) {
     this.opt = opt

@@ -5,7 +5,9 @@ import {
   readBlob
 } from '../utils/index'
 
-// 小地图插件
+/**
+ * 小地图插件
+ */
 class MiniMap {
   //  构造函数
   constructor(opt) {

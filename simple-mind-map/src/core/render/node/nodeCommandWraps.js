@@ -13,6 +13,11 @@ function setImage(imgData) {
   this.mindMap.execCommand('SET_NODE_IMAGE', this, imgData)
 }
 
+//  设置多图片
+function setImages(imgDataList) {
+  this.mindMap.execCommand('SET_NODE_IMAGES', this, imgDataList)
+}
+
 //  设置图标
 function setIcon(icons) {
   this.mindMap.execCommand('SET_NODE_ICON', this, icons)
@@ -57,6 +62,7 @@ export default {
   setData,
   setText,
   setImage,
+  setImages,
   setIcon,
   setHyperlink,
   setNote,

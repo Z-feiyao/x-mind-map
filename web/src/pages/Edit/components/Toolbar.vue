@@ -181,7 +181,6 @@ export default {
       list: [
         'back',
         'forward',
-        'painter',
         'siblingNode',
         'childNode',
         'deleteNode',
@@ -192,8 +191,7 @@ export default {
         'tag',
         'summary',
         'associativeLine',
-        'formula',
-        // 'attachment',
+        'attachment',
         'outerFrame',
         'annotation'
       ],

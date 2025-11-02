@@ -8,7 +8,10 @@ import {
 import MindMapNode from '../core/render/node/MindMapNode'
 import { CONSTANTS } from '../constants/constant'
 
-// 搜索插件
+/**
+ * 搜索插件
+ * todo 扩展搜索功能
+ */
 class Search {
   //  构造函数
   constructor({ mindMap }) {

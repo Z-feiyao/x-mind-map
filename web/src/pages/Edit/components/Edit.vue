@@ -1,35 +1,20 @@
 <template>
-  <div
-    class="editContainer"
-    @dragenter.stop.prevent="onDragenter"
-    @dragleave.stop.prevent
-    @dragover.stop.prevent
-    @drop.stop.prevent
-  >
-    <div
-      class="mindMapContainer"
-      id="mindMapContainer"
-      ref="mindMapContainer"
-    ></div>
+  <div class="editContainer" @dragenter.stop.prevent="onDragenter" @dragleave.stop.prevent @dragover.stop.prevent
+    @drop.stop.prevent>
+    <div class="mindMapContainer" id="mindMapContainer" ref="mindMapContainer"></div>
     <Count :mindMap="mindMap" v-if="!isZenMode"></Count>
     <Navigator v-if="mindMap" :mindMap="mindMap"></Navigator>
     <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
     <OutlineSidebar :mindMap="mindMap"></OutlineSidebar>
     <Style v-if="!isZenMode"></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
-    <AssociativeLineStyle
-      v-if="mindMap"
-      :mindMap="mindMap"
-    ></AssociativeLineStyle>
+    <AssociativeLineStyle v-if="mindMap" :mindMap="mindMap"></AssociativeLineStyle>
     <Theme v-if="mindMap" :data="mindMapData" :mindMap="mindMap"></Theme>
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
     <Contextmenu v-if="mindMap" :mindMap="mindMap"></Contextmenu>
     <RichTextToolbar v-if="mindMap" :mindMap="mindMap"></RichTextToolbar>
-    <NodeNoteContentShow
-      v-if="mindMap"
-      :mindMap="mindMap"
-    ></NodeNoteContentShow>
+    <NodeNoteContentShow v-if="mindMap" :mindMap="mindMap"></NodeNoteContentShow>
     <NodeAttachment v-if="mindMap" :mindMap="mindMap"></NodeAttachment>
     <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
     <SidebarTrigger v-if="!isZenMode"></SidebarTrigger>
@@ -38,18 +23,11 @@
     <NodeIconToolbar v-if="mindMap" :mindMap="mindMap"></NodeIconToolbar>
     <OutlineEdit v-if="mindMap" :mindMap="mindMap"></OutlineEdit>
     <Scrollbar v-if="isShowScrollbar && mindMap" :mindMap="mindMap"></Scrollbar>
-    <FormulaSidebar v-if="mindMap" :mindMap="mindMap"></FormulaSidebar>
-    <SourceCodeEdit v-if="mindMap" :mindMap="mindMap"></SourceCodeEdit>
     <NodeOuterFrame v-if="mindMap" :mindMap="mindMap"></NodeOuterFrame>
     <NodeTagStyle v-if="mindMap" :mindMap="mindMap"></NodeTagStyle>
     <Setting :data="mindMapData" :mindMap="mindMap"></Setting>
-    <div
-      class="dragMask"
-      v-if="showDragMask"
-      @dragleave.stop.prevent="onDragleave"
-      @dragover.stop.prevent
-      @drop.stop.prevent="onDrop"
-    >
+    <div class="dragMask" v-if="showDragMask" @dragleave.stop.prevent="onDragleave" @dragover.stop.prevent
+      @drop.stop.prevent="onDrop">
       <div class="dragTip">{{ $t('edit.dragTip') }}</div>
     </div>
   </div>
@@ -57,67 +35,58 @@
 
 <script>
 import MindMap from 'simple-mind-map'
-import MiniMap from 'simple-mind-map/src/plugins/MiniMap.js'
-import Watermark from 'simple-mind-map/src/plugins/Watermark.js'
-import KeyboardNavigation from 'simple-mind-map/src/plugins/KeyboardNavigation.js'
+import Themes from 'simple-mind-map-plugin-themes'
+import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
+import Demonstrate from 'simple-mind-map/src/plugins/Demonstrate.js'
+import Drag from 'simple-mind-map/src/plugins/Drag.js'
+import Export from 'simple-mind-map/src/plugins/Export.js'
 import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'
 import ExportXMind from 'simple-mind-map/src/plugins/ExportXMind.js'
-import Export from 'simple-mind-map/src/plugins/Export.js'
-import Drag from 'simple-mind-map/src/plugins/Drag.js'
-import Select from 'simple-mind-map/src/plugins/Select.js'
-import RichText from 'simple-mind-map/src/plugins/RichText.js'
-import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
-import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
-import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
-import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
-import Painter from 'simple-mind-map/src/plugins/Painter.js'
-import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
-import Formula from 'simple-mind-map/src/plugins/Formula.js'
-import RainbowLines from 'simple-mind-map/src/plugins/RainbowLines.js'
-import Demonstrate from 'simple-mind-map/src/plugins/Demonstrate.js'
-import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
+import KeyboardNavigation from 'simple-mind-map/src/plugins/KeyboardNavigation.js'
 import MindMapLayoutPro from 'simple-mind-map/src/plugins/MindMapLayoutPro.js'
-import Themes from 'simple-mind-map-plugin-themes'
+import MiniMap from 'simple-mind-map/src/plugins/MiniMap.js'
+import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
+import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
+import RainbowLines from 'simple-mind-map/src/plugins/RainbowLines.js'
+import RichText from 'simple-mind-map/src/plugins/RichText.js'
+import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
+import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
+import Select from 'simple-mind-map/src/plugins/Select.js'
+import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
+import Watermark from 'simple-mind-map/src/plugins/Watermark.js'
 // 协同编辑插件
-import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
-import OutlineSidebar from './OutlineSidebar'
-import Style from './Style'
-import BaseStyle from './BaseStyle'
-import Theme from './Theme'
-import Structure from './Structure'
-import Count from './Count'
-import NavigatorToolbar from './NavigatorToolbar'
-import ShortcutKey from './ShortcutKey'
-import Contextmenu from './Contextmenu'
-import RichTextToolbar from './RichTextToolbar'
-import NodeNoteContentShow from './NodeNoteContentShow.vue'
-import { getData, storeData, storeConfig } from '@/api'
-import Navigator from './Navigator.vue'
-import NodeImgPreview from './NodeImgPreview.vue'
-import SidebarTrigger from './SidebarTrigger.vue'
-import { mapState } from 'vuex'
+import { getData as getStoreData, storeConfig, storeData } from '@/api'
 import icon from '@/config/icon'
-import CustomNodeContent from './CustomNodeContent.vue'
-import Color from './Color.vue'
+import handleClipboardText from '@/utils/handleClipboardText'
+import { hideLoading, showLoading } from '@/utils/loading'
+import exampleData from 'simple-mind-map/example/exampleData'
+import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 import Vue from 'vue'
-import router from '../../../router'
-import store from '../../../store'
-import i18n from '../../../i18n'
-import Search from './Search.vue'
+import { mapState } from 'vuex'
+import AssociativeLineStyle from './AssociativeLineStyle.vue'
+import BaseStyle from './BaseStyle'
+import Contextmenu from './Contextmenu'
+import Count from './Count'
+import Navigator from './Navigator.vue'
+import NavigatorToolbar from './NavigatorToolbar'
+import NodeAttachment from './NodeAttachment.vue'
 import NodeIconSidebar from './NodeIconSidebar.vue'
 import NodeIconToolbar from './NodeIconToolbar.vue'
-import OutlineEdit from './OutlineEdit.vue'
-import { showLoading, hideLoading } from '@/utils/loading'
-import handleClipboardText from '@/utils/handleClipboardText'
-import Scrollbar from './Scrollbar.vue'
-import exampleData from 'simple-mind-map/example/exampleData'
-import FormulaSidebar from './FormulaSidebar.vue'
-import SourceCodeEdit from './SourceCodeEdit.vue'
-import NodeAttachment from './NodeAttachment.vue'
+import NodeImgPreview from './NodeImgPreview.vue'
+import NodeNoteContentShow from './NodeNoteContentShow.vue'
 import NodeOuterFrame from './NodeOuterFrame.vue'
 import NodeTagStyle from './NodeTagStyle.vue'
+import OutlineEdit from './OutlineEdit.vue'
+import OutlineSidebar from './OutlineSidebar'
+import RichTextToolbar from './RichTextToolbar'
+import Scrollbar from './Scrollbar.vue'
+import Search from './Search.vue'
 import Setting from './Setting.vue'
-import AssociativeLineStyle from './AssociativeLineStyle.vue'
+import ShortcutKey from './ShortcutKey'
+import SidebarTrigger from './SidebarTrigger.vue'
+import Structure from './Structure'
+import Style from './Style'
+import Theme from './Theme'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -132,19 +101,23 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(NodeImgAdjust)
   .usePlugin(TouchEvent)
   .usePlugin(SearchPlugin)
-  .usePlugin(Painter)
-  .usePlugin(Formula)
   .usePlugin(RainbowLines)
   .usePlugin(Demonstrate)
   .usePlugin(OuterFrame)
   .usePlugin(MindMapLayoutPro)
-// .usePlugin(Cooperate) // 协同插件
+  .usePlugin(Cooperate) // 协同插件
 
 // 注册主题
 Themes.init(MindMap)
 
 export default {
   name: 'Edit',
+  props: {
+    mindMapId: {
+      type: String,
+      default: ''
+    }
+  },
   components: {
     OutlineSidebar,
     Style,
@@ -165,8 +138,6 @@ export default {
     NodeIconToolbar,
     OutlineEdit,
     Scrollbar,
-    FormulaSidebar,
-    SourceCodeEdit,
     NodeAttachment,
     NodeOuterFrame,
     NodeTagStyle,
@@ -222,7 +193,6 @@ export default {
     this.$bus.$on('startTextEdit', this.handleStartTextEdit)
     this.$bus.$on('endTextEdit', this.handleEndTextEdit)
     this.$bus.$on('createAssociativeLine', this.handleCreateLineFromActiveNode)
-    this.$bus.$on('startPainter', this.handleStartPainter)
     this.$bus.$on('node_tree_render_end', this.handleHideLoading)
     this.$bus.$on('showLoading', this.handleShowLoading)
     window.addEventListener('resize', this.handleResize)
@@ -235,7 +205,6 @@ export default {
     this.$bus.$off('startTextEdit', this.handleStartTextEdit)
     this.$bus.$off('endTextEdit', this.handleEndTextEdit)
     this.$bus.$off('createAssociativeLine', this.handleCreateLineFromActiveNode)
-    this.$bus.$off('startPainter', this.handleStartPainter)
     this.$bus.$off('node_tree_render_end', this.handleHideLoading)
     this.$bus.$off('showLoading', this.handleShowLoading)
     window.removeEventListener('resize', this.handleResize)
@@ -252,10 +221,6 @@ export default {
 
     handleCreateLineFromActiveNode() {
       this.mindMap.associativeLine.createLineFromActiveNode()
-    },
-
-    handleStartPainter() {
-      this.mindMap.painter.startPainter()
     },
 
     handleResize() {
@@ -278,14 +243,14 @@ export default {
 
     // 获取思维导图数据，实际应该调接口获取
     getData() {
-      let storeData = getData()
+      let storeData = getStoreData(this.mindMapId)
       this.mindMapData = storeData
     },
 
     // 存储数据当数据有变时
     bindSaveEvent() {
       this.$bus.$on('data_change', data => {
-        storeData(data)
+        storeData(data, this.mindMapId)
       })
       this.$bus.$on('view_data_change', data => {
         clearTimeout(this.storeConfigTimer)
@@ -555,40 +520,37 @@ export default {
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()
       })
-      // 转发事件
-      ;[
-        'node_active',
-        'data_change',
-        'view_data_change',
-        'back_forward',
-        'node_contextmenu',
-        'node_click',
-        'draw_click',
-        'expand_btn_click',
-        'svg_mousedown',
-        'mouseup',
-        'mode_change',
-        'node_tree_render_end',
-        'rich_text_selection_change',
-        'transforming-dom-to-images',
-        'generalization_node_contextmenu',
-        'painter_start',
-        'painter_end',
-        'scrollbar_change',
-        'scale',
-        'translate',
-        'node_attachmentClick',
-        'node_attachmentContextmenu',
-        'demonstrate_jump',
-        'exit_demonstrate',
-        'node_note_dblclick'
-      ].forEach(event => {
-        this.mindMap.on(event, (...args) => {
-          this.$bus.$emit(event, ...args)
+        // 转发事件
+        ;[
+          'node_active',
+          'data_change',
+          'view_data_change',
+          'back_forward',
+          'node_contextmenu',
+          'node_click',
+          'draw_click',
+          'expand_btn_click',
+          'svg_mousedown',
+          'mouseup',
+          'mode_change',
+          'node_tree_render_end',
+          'rich_text_selection_change',
+          'transforming-dom-to-images',
+          'generalization_node_contextmenu',
+          'scrollbar_change',
+          'scale',
+          'translate',
+          'node_attachmentClick',
+          'node_attachmentContextmenu',
+          'demonstrate_jump',
+          'exit_demonstrate',
+          'node_note_dblclick'
+        ].forEach(event => {
+          this.mindMap.on(event, (...args) => {
+            this.$bus.$emit(event, ...args)
+          })
         })
-      })
       this.bindSaveEvent()
-      this.testDynamicCreateNodes()
       // 如果应用被接管，那么抛出事件传递思维导图实例
       if (window.takeOverApp) {
         this.$bus.$emit('app_inited', this.mindMap)

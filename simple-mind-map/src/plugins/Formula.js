@@ -6,8 +6,11 @@ import { getBaseStyleText, getFontStyleText } from './FormulaStyle'
 let extended = false
 const QuillFormula = Quill.import('formats/formula')
 
-// 数学公式支持插件
-// 该插件在富文本模式下可用
+
+/**
+ * 数学公式支持插件
+ * 该插件在富文本模式下可用
+ */
 class Formula {
   //  构造函数
   constructor(opt) {

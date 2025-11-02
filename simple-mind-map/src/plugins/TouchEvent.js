@@ -1,6 +1,8 @@
 import { getTwoPointDistance } from '../utils'
 
-// 手势事件支持插件
+/**
+ * 手势事件支持插件
+ */
 class TouchEvent {
   //  构造函数
   constructor({ mindMap }) {

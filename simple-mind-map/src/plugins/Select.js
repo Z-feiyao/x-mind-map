@@ -1,7 +1,9 @@
 import { bfsWalk, throttle, checkTwoRectIsOverlap } from '../utils'
 import AutoMove from '../utils/AutoMove'
 
-// 节点选择插件
+/**
+ * 节点选择插件
+ */
 class Select {
   //  构造函数
   constructor({ mindMap }) {

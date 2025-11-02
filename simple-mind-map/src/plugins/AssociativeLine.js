@@ -23,7 +23,9 @@ const styleProps = [
   'associativeLineTextFontFamily'
 ]
 
-// 关联线插件
+/**
+ * 关联线插件
+ */
 class AssociativeLine {
   constructor(opt = {}) {
     this.mindMap = opt.mindMap

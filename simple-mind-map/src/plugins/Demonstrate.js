@@ -18,7 +18,9 @@ const defaultConfig = {
   openBlankMode: true // 是否开启填空模式，即带下划线的文本默认不显示，按回车键才依次显示
 }
 
-// 演示插件
+/**
+ * 演示插件
+ */
 class Demonstrate {
   constructor(opt) {
     this.mindMap = opt.mindMap

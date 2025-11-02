@@ -136,7 +136,9 @@ const defaultStyle = {
   fill: 'rgba(9,132,227,0.05)'
 }
 
-// 外框插件
+/**
+ * 外框插件
+ */
 class OuterFrame {
   constructor(opt = {}) {
     this.mindMap = opt.mindMap

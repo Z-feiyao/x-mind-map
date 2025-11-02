@@ -10,7 +10,9 @@ const defaultColorsList = [
   'rgb(152, 132, 234)'
 ]
 
-// 彩虹线条插件
+/**
+ * 彩虹线条插件
+ */
 class RainbowLines {
   constructor({ mindMap }) {
     this.mindMap = mindMap

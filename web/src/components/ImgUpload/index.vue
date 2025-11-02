@@ -1,7 +1,7 @@
 <template>
   <div class="imgUploadContainer">
     <div class="imgUploadPanel">
-      <div class="upBtn" v-if="!value">
+      <div class="upBtn">
         <label
           for="imgUploadInput"
           class="imgUploadInputArea"
@@ -13,16 +13,19 @@
         <input
           type="file"
           accept="image/*"
+          multiple
           id="imgUploadInput"
           @change="onImgUploadInputChange"
         />
       </div>
-      <div v-if="value" class="uploadInfoBox">
-        <div
-          class="previewBox"
-          :style="{ backgroundImage: `url('${value}')` }"
-        ></div>
-        <span class="delBtn el-icon-close" @click="deleteImg"></span>
+      <div class="uploadInfoBox">
+        <div v-for="(img, index) in imageList" :key="index" class="previewItem">
+          <div
+            class="previewBox"
+            :style="{ backgroundImage: `url('${img}')` }"
+          ></div>
+          <span class="delBtn el-icon-close" @click="deleteImg(index)"></span>
+        </div>
       </div>
     </div>
   </div>
@@ -37,13 +40,22 @@ export default {
   },
   props: {
     value: {
-      type: String,
-      default: ''
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
-      file: null
+      files: [],
+      imageList: []
+    }
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler(val) {
+        this.imageList = Array.isArray(val) ? val : []
+      }
     }
   },
   methods: {
@@ -53,8 +65,8 @@ export default {
      * @Desc: 图片选择事件
      */
     onImgUploadInputChange(e) {
-      let file = e.target.files[0]
-      this.selectImg(file)
+      let files = Array.from(e.target.files)
+      files.forEach(file => this.selectImg(file))
     },
 
     /**
@@ -64,8 +76,8 @@ export default {
      */
     onDrop(e) {
       let dt = e.dataTransfer
-      let file = dt.files && dt.files[0]
-      this.selectImg(file)
+      let files = Array.from(dt.files)
+      files.forEach(file => this.selectImg(file))
     },
 
     /**
@@ -74,11 +86,12 @@ export default {
      * @Desc: 选择图片
      */
     selectImg(file) {
-      this.file = file
+      this.files.push(file)
       let fr = new FileReader()
       fr.readAsDataURL(file)
       fr.onload = e => {
-        this.$emit('change', e.target.result)
+        this.imageList.push(e.target.result)
+        this.$emit('change', [...this.imageList])
       }
     },
 
@@ -87,23 +100,29 @@ export default {
      * @Date: 2021-06-22 23:03:46
      * @Desc: 获取图片大小
      */
-    getSize() {
-      return new Promise(resolve => {
-        let img = new Image()
-        img.src = this.value
-        img.onload = () => {
-          resolve({
-            width: img.width,
-            height: img.height
-          })
-        }
-        img.onerror = () => {
-          resolve({
-            width: 0,
-            height: 0
-          })
-        }
-      })
+    async getSize() {
+      const sizes = await Promise.all(
+        this.imageList.map(
+          url =>
+            new Promise(resolve => {
+              let img = new Image()
+              img.src = url
+              img.onload = () => {
+                resolve({
+                  width: img.width,
+                  height: img.height
+                })
+              }
+              img.onerror = () => {
+                resolve({
+                  width: 0,
+                  height: 0
+                })
+              }
+            })
+        )
+      )
+      return sizes
     },
 
     /**
@@ -111,9 +130,10 @@ export default {
      * @Date: 2021-06-06 21:59:57
      * @Desc: 删除图片
      */
-    deleteImg() {
-      this.$emit('change', '')
-      this.file = null
+    deleteImg(index) {
+      this.files.splice(index, 1)
+      this.imageList.splice(index, 1)
+      this.$emit('change', [...this.imageList])
     }
   }
 }
@@ -121,4 +141,48 @@ export default {
 
 <style lang="less" scoped>
 @import './style.less';
+
+.imgUploadContainer {
+  .imgUploadPanel {
+    .uploadInfoBox {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      
+      .previewItem {
+        position: relative;
+        width: 100px;
+        height: 100px;
+
+        .previewBox {
+          width: 100%;
+          height: 100%;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+        }
+
+        .delBtn {
+          position: absolute;
+          right: -6px;
+          top: -6px;
+          width: 16px;
+          height: 16px;
+          line-height: 16px;
+          text-align: center;
+          background-color: rgba(0, 0, 0, 0.3);
+          color: #fff;
+          border-radius: 50%;
+          cursor: pointer;
+
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+          }
+        }
+      }
+    }
+  }
+}
 </style>

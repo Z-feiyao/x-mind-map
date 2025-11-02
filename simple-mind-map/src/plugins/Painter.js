@@ -1,6 +1,8 @@
 import { checkIsNodeStyleDataKey } from '../utils/index'
 
-// 格式刷插件
+/**
+ * 格式刷插件
+ */
 class Painter {
   constructor({ mindMap }) {
     this.mindMap = mindMap

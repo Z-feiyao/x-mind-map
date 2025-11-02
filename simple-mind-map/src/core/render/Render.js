@@ -311,6 +311,12 @@ class Render {
     // 设置节点图片
     this.setNodeImage = this.setNodeImage.bind(this)
     this.mindMap.command.add('SET_NODE_IMAGE', this.setNodeImage)
+    // 设置节点多图片
+    this.setNodeImages = this.setNodeImages.bind(this)
+    this.mindMap.command.add('SET_NODE_IMAGES', this.setNodeImages)
+    // 设置节点多图片
+    this.setCurrentImgIndex = this.setCurrentImgIndex.bind(this)
+    this.mindMap.command.add('SET_CURRENT_IMG_INDEX', this.setCurrentImgIndex)
     // 设置节点图标
     this.setNodeIcon = this.setNodeIcon.bind(this)
     this.mindMap.command.add('SET_NODE_ICON', this.setNodeIcon)
@@ -489,7 +495,7 @@ class Render {
   }
 
   //   渲染
-  render(callback = () => {}, source) {
+  render(callback = () => { }, source) {
     // 切换主题时，被收起的节点需要添加样式复位的标注
     if (source === CONSTANTS.CHANGE_THEME) {
       this.resetUnExpandNodeStyle()
@@ -1699,14 +1705,36 @@ class Render {
       height,
       custom = false
     } = data || { url: '', title: '', width: 0, height: 0, custom: false }
+
+    if (!url) {
+      return
+    }
+
+    let images = node.getData("images") || []
+    images.push({ url: url, title: title, width: width, height: height })
+    
     this.setNodeDataRender(node, {
-      image: url,
-      imageTitle: title || '',
-      imageSize: {
-        width,
-        height,
-        custom
-      }
+      images,
+      currentImgIndex: images.length - 1
+    })
+  }
+
+  //  设置节点多图片
+  setNodeImages(node, images) {
+    this.setNodeDataRender(node, {
+      images
+    })
+  }
+
+  // 设置当前显示的图片
+  setCurrentImgIndex(node, index) {
+    let images = node.getData("images");
+    if (index >= images.length) {
+      index = 0
+    }
+
+    this.setNodeDataRender(node, {
+      currentImgIndex: index
     })
   }
 
@@ -1897,7 +1925,7 @@ class Render {
   }
 
   // 定位到指定节点
-  goTargetNode(node, callback = () => {}) {
+  goTargetNode(node, callback = () => { }) {
     let uid = typeof node === 'string' ? node : node.getData('uid')
     if (!uid) return
     this.expandToNodeUid(uid, () => {
@@ -1912,6 +1940,7 @@ class Render {
 
   //  更新节点数据
   setNodeData(node, data) {
+    console.log('setNodeData', node, data);
     Object.keys(data).forEach(key => {
       node.nodeData.data[key] = data[key]
     })
@@ -1973,7 +2002,7 @@ class Render {
   }
 
   // 展开到指定uid的节点
-  expandToNodeUid(uid, callback = () => {}) {
+  expandToNodeUid(uid, callback = () => { }) {
     if (!this.renderTree) {
       callback()
       return
@@ -2035,12 +2064,12 @@ class Render {
       }
       // 概要节点
       let isGeneralization = false
-      ;(node._generalizationList || []).forEach(item => {
-        if (item.generalizationNode.getData('uid') === uid) {
-          res = item.generalizationNode
-          isGeneralization = true
-        }
-      })
+        ; (node._generalizationList || []).forEach(item => {
+          if (item.generalizationNode.getData('uid') === uid) {
+            res = item.generalizationNode
+            isGeneralization = true
+          }
+        })
       if (isGeneralization) {
         return true
       }

@@ -9,7 +9,7 @@
     <div class="title">方式一</div>
     <ImgUpload
       ref="ImgUpload"
-      v-model="img"
+      v-model="imgs"
       style="margin-bottom: 12px;"
     ></ImgUpload>
     <div class="title">方式二</div>
@@ -21,6 +21,7 @@
         placeholder="http://xxx.com/xx.jpg"
         @keydown.native.stop
       ></el-input>
+      <el-button size="mini" @click="addImgUrl" style="margin-left: 10px;">添加</el-button>
     </div>
     <div class="title">可选</div>
     <div class="inputBox">
@@ -53,7 +54,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      img: '',
+      imgs: [],
       imgUrl: '',
       imgTitle: '',
       activeNodes: null,
@@ -77,14 +78,8 @@ export default {
       this.reset()
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
-        let img = firstNode.getData('image') || ''
-        if (img) {
-          if (/^https?:\/\//.test(img)) {
-            this.imgUrl = img
-          } else {
-            this.img = img
-          }
-        }
+        let images = firstNode.getData('images') || []
+        this.imgs = images.map(item => item.url)
         this.imgTitle = firstNode.getData('imageTitle') || ''
       }
       this.dialogVisible = true
@@ -96,37 +91,48 @@ export default {
     },
 
     reset() {
-      this.img = ''
+      this.imgs = []
       this.imgTitle = ''
+      this.imgUrl = ''
+    },
+
+    addImgUrl() {
+      if (!this.imgUrl) return
+      if (!/^https?:\/\//.test(this.imgUrl)) {
+        this.$message.error('请输入正确的图片URL')
+        return
+      }
+      this.imgs.push(this.imgUrl)
       this.imgUrl = ''
     },
 
     async confirm() {
       try {
         // 删除图片
-        if (!this.img && !this.imgUrl) {
+        if (this.imgs.length === 0) {
           this.cancel()
           this.activeNodes.forEach(node => {
-            node.setImage(null)
+            node.setImages([])
           })
           return
         }
-        let res = null
-        let img = ''
-        if (this.img) {
-          img = this.img
-          res = await this.$refs.ImgUpload.getSize()
-        } else if (this.imgUrl) {
-          img = this.imgUrl
-          res = await getImageSize(img)
-        }
-        this.activeNodes.forEach(node => {
-          node.setImage({
-            url: img || 'none',
-            title: this.imgTitle,
-            width: res.width || 100,
-            height: res.height || 100
+        
+        const sizes = await Promise.all(
+          this.imgs.map(async url => {
+            const res = await getImageSize(url)
+            return {
+              url,
+              width: res.width || 100,
+              height: res.height || 100
+            }
           })
+        )
+
+        this.activeNodes.forEach(node => {
+          node.setImages(sizes.map(item => ({
+            ...item,
+            title: this.imgTitle
+          })))
         })
         this.cancel()
       } catch (error) {

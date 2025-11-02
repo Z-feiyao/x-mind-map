@@ -10,9 +10,20 @@ const remove = `<svg width="14px" height="14px" class="icon" viewBox="0 0 1024 1
 // 图片调整按钮
 const imgAdjust = `<svg width="12px" height="12px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#ffffff" d="M1008.128 614.4a25.6 25.6 0 0 0-27.648 5.632l-142.848 142.848L259.072 186.88 401.92 43.52A25.6 25.6 0 0 0 384 0h-358.4a25.6 25.6 0 0 0-25.6 25.6v358.4a25.6 25.6 0 0 0 43.52 17.92l143.36-142.848 578.048 578.048-142.848 142.848a25.6 25.6 0 0 0 17.92 43.52h358.4a25.6 25.6 0 0 0 25.6-25.6v-358.4a25.6 25.6 0 0 0-15.872-25.088z"  /></svg>`
 
+// > 按钮
+const openRight = `<svg width="14" height="14" xmlns="http://www.w3.org/2000/svg">
+ <g id="Layer_1">
+  <title>Layer 1</title>
+  <line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_1" y2="6.74265" x2="10.52941" y1="2.03677" x1="1.70588" stroke="#ffffff" fill="none"/>
+  <line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_2" y2="6.66912" x2="10.30882" y1="12.33088" x1="1.70588" stroke="#ffffff" fill="none"/>
+ </g>
+
+</svg>`
+
 export default {
   open,
   close,
   remove,
-  imgAdjust
+  imgAdjust,
+  openRight
 }

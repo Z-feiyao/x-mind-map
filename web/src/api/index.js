@@ -3,8 +3,10 @@ import { simpleDeepClone } from 'simple-mind-map/src/utils/index'
 import Vue from 'vue'
 import vuexStore from '@/store'
 
+// 
 const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
 const SIMPLE_MIND_MAP_LANG = 'SIMPLE_MIND_MAP_LANG'
+// 本地配置
 const SIMPLE_MIND_MAP_LOCAL_CONFIG = 'SIMPLE_MIND_MAP_LOCAL_CONFIG'
 
 let mindMapData = null
@@ -13,8 +15,9 @@ let mindMapData = null
  * @Author: 王林
  * @Date: 2021-08-01 10:10:49
  * @Desc: 获取缓存的思维导图数据
+ * @param {string} id - 思维导图ID
  */
-export const getData = () => {
+export const getData = (id) => {
   if (window.takeOverApp) {
     mindMapData = window.takeOverAppMethods.getMindMapData()
     return mindMapData
@@ -22,7 +25,8 @@ export const getData = () => {
   if (vuexStore.state.isHandleLocalFile) {
     return Vue.prototype.getCurrentData()
   }
-  let store = localStorage.getItem(SIMPLE_MIND_MAP_DATA)
+  const key = `${SIMPLE_MIND_MAP_DATA}_${id}`
+  let store = localStorage.getItem(key)
   if (store === null) {
     return simpleDeepClone(exampleData)
   } else {
@@ -38,14 +42,16 @@ export const getData = () => {
  * @Author: 王林
  * @Date: 2021-08-01 10:14:28
  * @Desc: 存储思维导图数据
+ * @param {Object} data - 思维导图数据
+ * @param {string} id - 思维导图ID
  */
-export const storeData = data => {
+export const storeData = (data, id) => {
   try {
     let originData = null
     if (window.takeOverApp) {
       originData = mindMapData
     } else {
-      originData = getData()
+      originData = getData(id)
     }
     originData.root = data
     if (window.takeOverApp) {
@@ -58,7 +64,8 @@ export const storeData = data => {
       return
     }
     let dataStr = JSON.stringify(originData)
-    localStorage.setItem(SIMPLE_MIND_MAP_DATA, dataStr)
+    const key = `${SIMPLE_MIND_MAP_DATA}_${id}`
+    localStorage.setItem(key, dataStr)
   } catch (error) {
     console.log(error)
   }

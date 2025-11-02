@@ -13,7 +13,9 @@ import { transformToMarkdown } from '../parse/toMarkdown'
 import { ERROR_TYPES } from '../constants/constant'
 import { transformToTxt } from '../parse/toTxt'
 
-//  导出插件
+/**
+ * 导出插件
+ */
 class Export {
   //  构造函数
   constructor(opt) {
